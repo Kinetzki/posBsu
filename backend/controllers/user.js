@@ -123,62 +123,58 @@ exports.findRequiredSubs = (req, res, next) => {
                   where: {
                     degree: user.degree,
                   },
-                })
-                  .then((el) => {
-                    const courseKeys = Object.keys(courseTypes);
-                    if (el.electives < courseTypes["elective"].length) {
-                      delete courseTypes.electives;
-                    }
-                    console.log(courseKeys);
-                    var no_thesis = false;
-                    courseKeys.map((item) => {
-                      if (
-                        item.toString() !== "thesis" &&
-                        item.toString() !== "dissertation" &&
-                        item.toString() !== "capstone"
-                      ) {
-                        if (courseTypes[item].length > 0) {
-                          no_thesis = true;
-                          delete courseTypes.thesis;
-                          delete courseTypes.dissertation;
-                          delete courseTypes.capstone;
-                        }
+                }).then((el) => {
+                  const courseKeys = Object.keys(courseTypes);
+                  if (el.electives < courseTypes["elective"].length) {
+                    delete courseTypes.electives;
+                  }
+                  // var no_thesis = false;
+                  courseKeys.map((item) => {
+                    if (
+                      item.toString() !== "thesis" &&
+                      item.toString() !== "dissertation" &&
+                      item.toString() !== "capstone"
+                    ) {
+                      if (courseTypes[item].length > 0) {
+                        // no_thesis = true;
+                        delete courseTypes.thesis;
+                        delete courseTypes.dissertation;
+                        delete courseTypes.capstone;
                       }
-                    });
-                    return Promise.all(
-                      courseKeys.map(async (item) => {
-                        if (
-                          !(
-                            no_thesis &&
-                            (item === "thesis" ||
-                              item === "capstone" ||
-                              item === "dissertation")
-                          )
-                        ) {
-                          await Promise.all(
-                            courseTypes[item].map(async (courseTake) => {
-                              const userTaker = await CourseTakers.findOne({
-                                where: {
-                                  user_id: user.id,
-                                  course_code: courseTake.course_code,
-                                },
-                              });
-                              if (!userTaker) {
-                                await CourseTakers.create({
-                                  course_code: courseTake.course_code,
-                                  course_title: courseTake.course_title,
-                                  user_id: user.id,
-                                });
-                              }
-                            })
-                          );
-                        }
-                      })
-                    );
-                  })
-                  .then(() => {
-                    return res.status(200).json({ success: true, courseTypes });
+                    }
                   });
+                  // return Promise.all(
+                  //   courseKeys.map(async (item) => {
+                  //     if (
+                  //       !(
+                  //         no_thesis &&
+                  //         (item === "thesis" ||
+                  //           item === "capstone" ||
+                  //           item === "dissertation")
+                  //       )
+                  //     ) {
+                  //       await Promise.all(
+                  //         courseTypes[item].map(async (courseTake) => {
+                  //           const userTaker = await CourseTakers.findOne({
+                  //             where: {
+                  //               user_id: user.id,
+                  //               course_code: courseTake.course_code,
+                  //             },
+                  //           });
+                  //           if (!userTaker) {
+                  //             await CourseTakers.create({
+                  //               course_code: courseTake.course_code,
+                  //               course_title: courseTake.course_title,
+                  //               user_id: user.id,
+                  //             });
+                  //           }
+                  //         })
+                  //       );
+                  //     }
+                  //   })
+                  // );
+                  return res.status(200).json({ success: true, courseTypes });
+                });
               });
           });
       } else {
@@ -193,11 +189,83 @@ exports.findRequiredSubs = (req, res, next) => {
 };
 
 exports.findAllTakers = (req, res, next) => {
-  CourseTakers.findAll()
-    .then((data) => {
-      return res.status(200).json({ success: true, data });
+  User.findAll().then(users => {
+    var allTakers = [];
+    users.map(user => {
+      const taken = [];
+      if (user) {
+        return UserCourse.findAll({
+          where: {
+            user_id: user.id,
+          },
+        })
+          .then((userCourses) => {
+            userCourses.forEach((element) => {
+              taken.push(element.course_code);
+            });
+          })
+          .then(() => {
+            const required = [];
+            // return res.status(200).json({success: true, taken});
+            return Courses.findAll({
+              where: {
+                degree: user.degree,
+              },
+            })
+              .then((allCourses) => {
+                allCourses.forEach((element) => {
+                  if (!taken.includes(element.course_code)) {
+                    required.push(element);
+                  }
+                });
+              })
+              .then(() => {
+                const courseTypes = {};
+                function addItem(key, item) {
+                  if (!courseTypes[key]) {
+                    courseTypes[key] = []; // If the key doesn't exist, create an empty array
+                  }
+                  courseTypes[key].push(item); // Push the item into the array
+                }
+                required.forEach((el) => {
+                  addItem(el.course_type, el);
+                });
+                return CourseElectives.findOne({
+                  where: {
+                    degree: user.degree,
+                  },
+                }).then((el) => {
+                  const courseKeys = Object.keys(courseTypes);
+                  if (el.electives < courseTypes["elective"].length) {
+                    delete courseTypes.electives;
+                  }
+                  // var no_thesis = false;
+                  courseKeys.map((item) => {
+                    if (
+                      item.toString() !== "thesis" &&
+                      item.toString() !== "dissertation" &&
+                      item.toString() !== "capstone"
+                    ) {
+                      if (courseTypes[item].length > 0) {
+                        // no_thesis = true;
+                        delete courseTypes.thesis;
+                        delete courseTypes.dissertation;
+                        delete courseTypes.capstone;
+                      }
+                    }
+                  });
+                  Object.keys(courseTypes).map(item => {
+                    courseTypes[item].map(el => {
+                      allTakers.push(el);
+                    })
+                  })
+                  return res.status(200).json({success: true, courseTypes: allTakers});
+                });
+              });
+          });
+      }
     })
-    .catch((err) => {
-      next(err);
-    });
+  }).catch(err=>{
+    next(err);
+  })
 };

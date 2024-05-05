@@ -16,7 +16,7 @@ function Admin() {
           "http://127.0.0.1:3001/api/v1/user/admin/all"
         );
         if (response.status === 200) {
-          const takers = response.data.data;
+          const takers = response.data.courseTypes;
           const counts = {};
           takers.forEach((course) => {
             const count = { available: false };
