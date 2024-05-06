@@ -29,6 +29,8 @@ function Home({srcode, degree, isNewUser}) {
   };
 
   useEffect(()=>{
+    console.log(isNewUser)
+    console.log(degree)
     if (isNewUser) {
       const newUser = async () => {
         const response = await createUser({degree:degree, srcode:srcode, courses: [], academic_year: "2023-2024"})

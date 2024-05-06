@@ -4,24 +4,24 @@ import { useNavigate } from "react-router-dom";
 function Departments({ setDeg }) {
   const depts = {
     coe: [
-      "Straight Master's-Doctoral in Electronics Engineering ",
+      "Straight Master's-Doctoral in Electronics Engineering",
       "Doctor of Philosophy in Engineering Management",
       "Doctor of Philosophy in Engineering Education",
-      "Master of Science in Transportation Engineering ",
-      "Master of Science in Material Science and Engineering ",
-      "Master of Science in Earthquake Engineering ",
-      "Master of Science in Advanced Manufacturing ",
+      "Master of Science in Transportation Engineering",
+      "Master of Science in Material Science and Engineering",
+      "Master of Science in Earthquake Engineering",
+      "Master of Science in Advanced Manufacturing",
       "Master of Science in Engineering Management",
       "Master of Science in Construction Management",
-      "Doctor of Philosophy in Electronics Engineering ",
-      "Master of Science in Electronics Engineering ",
-      "Master of Science in Computer Engineering ",
-      "Master of Engineering major in Mechanical Engineering ",
-      "Master of Engineering major in Industrial Engineering ",
-      "Master of Engineering major in Environmental Engineering ",
+      "Doctor of Philosophy in Electronics Engineering",
+      "Master of Science in Electronics Engineering",
+      "Master of Science in Computer Engineering",
+      "Master of Engineering major in Mechanical Engineering",
+      "Master of Engineering major in Industrial Engineering",
+      "Master of Engineering major in Environmental Engineering",
       "Master of Engineering major in Electrical Engineering",
       "Master of Engineering major in Electronics Engineering",
-      "Master of Engineering major in Computer Engineering ",
+      "Master of Engineering major in Computer Engineering",
       "Master of Engineering major in Chemical Engineering",
       "Master of Engineering major in Civil Engineering",
     ],
@@ -41,7 +41,6 @@ function Departments({ setDeg }) {
   useEffect(() => {
     if (dept) {
       setShowDegrees(true);
-      console.log(dept);
     } else {
       setShowDegrees(false);
     }
@@ -50,7 +49,6 @@ function Departments({ setDeg }) {
   const handleProceed = () => {
     if (degree) {
         setDeg(degree);
-        navigate("/dashboard");
     }
   }
 
@@ -59,7 +57,7 @@ function Departments({ setDeg }) {
       <div className="bg-white w-[800px] h-[400px] p-5 flex flex-col items-center gap-[50px] relative">
         {showDegrees && (
           <div
-            className={`absolute top-[-80px] left-[${position.x}px] flex flex-col h-[85vh] w-[550px] bg-white overflow-y-auto gap-2 p-4`}
+            className={`absolute top-[-80px] left-[${position.x}px] flex flex-col max-h-[85vh] w-[550px] bg-white overflow-y-auto gap-2 p-4`}
           >
             {depts[dept].map((deg) => {
               return (

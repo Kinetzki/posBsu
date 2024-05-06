@@ -132,6 +132,7 @@ exports.findRequiredSubs = (req, res, next) => {
                     degree: user.degree,
                   },
                 }).then((el) => {
+                  console.log(el)
                   const courseKeys = Object.keys(courseTypes);
                   if (el.electives < courseTypes["elective"].length) {
                     delete courseTypes.electives;

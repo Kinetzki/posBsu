@@ -11,7 +11,6 @@ function Login2({ setSr, setDegree }) {
   const navigate = useNavigate();
   const [showUserStatus, setIsShowUserStatus] = useState(false);
   const [isShowDeps, setIsShowDeps] = useState(false);
-
   useEffect(() => {
     if (isShowDeps) {
       setIsShowUserStatus(false);
@@ -55,6 +54,9 @@ function Login2({ setSr, setDegree }) {
               <div
                 className="bg-[#0E87C9] text-white font-semibold p-3 rounded-full px-[80px] w-fit flex items-center justify-center gap-1 hover:bg-slate-800 cursor-pointer"
                 onClick={() => {
+                    if (srcode === 'admin') {
+                        navigate("/admin");
+                    }
                   // change this
                   setSr(srcode);
                   // navigate("/dashboard");
