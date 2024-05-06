@@ -5,14 +5,14 @@ import extractTextFromPDF from "./Utilit"; // Path to your utility function
 import Button1 from "./components/Button1";
 import Header from "./components/header";
 import { processData } from "./utils/extractValueKeys";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 import DragAndDrop from "./components/DragAndDrop";
 import Required from "./components/Required";
 import Taken from "./components/Taken";
 import axios from "axios";
 
-function Home() {
+function Home({srcode, degree, isNewUser}) {
   const [data, setData] = useState(null);
   const [active, setActive] = useState("upload");
 
@@ -27,6 +27,15 @@ function Home() {
       console.error(err);
     }
   };
+
+  useEffect(()=>{
+    if (isNewUser) {
+      const newUser = async () => {
+        const response = await createUser({degree:degree, srcode:srcode, courses: [], academic_year: "2023-2024"})
+      }
+      newUser();
+    }
+  }, [])
 
   return (
     <div className="w-full min-h-screen flex flex-col">
@@ -72,9 +81,9 @@ function Home() {
       )}
       {active === "required" && 
       <Required 
-      srcode={data}
+      srcode={srcode}
       />}
-      {active === "taken" && <Taken/>}
+      {active === "taken" && <Taken srcode={srcode}/>}
     </div>
   );
 }

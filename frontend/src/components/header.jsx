@@ -2,8 +2,7 @@ import React from "react";
 import bsuLogo from "../assets/icons/bsuLogo.svg"
 function Header() {
   return (
-    <div className="flex justify-between items-center px-5 py-1 bg-white shadow-md w-full">
-
+    <div className="flex justify-between items-center px-5 py-1 bg-white shadow-md w-full h-[70px]">
       <div className="flex items-center gap-3">
         <img src={bsuLogo} alt="" className="w-[60px]"/>
         <div className="flex flex-col">

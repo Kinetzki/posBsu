@@ -9,7 +9,7 @@ function Required({ srcode }) {
     const fetchRequired = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/api/v1/user/${srcode.srcode}/required`
+          `http://localhost:3001/api/v1/user/${srcode}/required`
         );
         setRequiredSubs(response.data.courseTypes);
         console.log(response.data.courseTypes);
@@ -19,6 +19,7 @@ function Required({ srcode }) {
     };
     fetchRequired();
   }, []);
+  
   return (
     <div className="flex flex-col w-full p-5">
       {

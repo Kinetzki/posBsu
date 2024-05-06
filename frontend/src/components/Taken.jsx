@@ -2,14 +2,14 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import TakenCourse from "./takenCourse";
 
-function Taken({ data }) {
+function Taken({ srcode }) {
   const [courses, setCourses] = useState([]);
 
   useEffect(() => {
     const fetchTaken = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/api/v1/user-course/${"G2008-00568"}/all`
+          `http://localhost:3001/api/v1/user-course/${srcode}/all`
         );
         console.log(response.data.userCourses);
         setCourses(response.data.userCourses);
@@ -19,6 +19,7 @@ function Taken({ data }) {
     };
     fetchTaken();
   }, []);
+
   return (
     <div className="w-full flex flex-col p-2 px-[50px]">
       <div>
@@ -38,7 +39,8 @@ function Taken({ data }) {
           <h1 className="text-black w-[200px] truncate">Instructor</h1>
           <h1 className="text-black w-[120px]">Academic Year</h1>
         </div>
-        {courses.map((course, i) => {
+
+        {(courses.length > 0) && courses.map((course, i) => {
           return <TakenCourse course={course} key={i} />;
         })}
       </div>

@@ -3,12 +3,12 @@ const UserCourse = require("../models/User-Course");
 const Courses = require("../models/Course");
 const CourseElectives = require("../models/Course-electives");
 const CourseTakers = require("../models/Course-takers");
+
 exports.createUser = (req, res, next) => {
   const { name, srcode, courses, academic_year, degree } = req.body;
-
   User.findOne({
     where: {
-      name: name,
+      srcode: srcode,
     },
   })
     .then((data) => {
@@ -20,20 +20,27 @@ exports.createUser = (req, res, next) => {
               course_code: course.courseCode,
               academic_year: academic_year,
             },
-          }).then((info) => {
-            if (!info) {
-              return UserCourse.create({
-                course_code: course.courseCode,
-                course_title: course.courseTitle,
-                grade: course.grade,
-                units: course.units,
-                section: course.section,
-                instructor: course.instructor,
-                user_id: data.id,
-                academic_year: academic_year,
-              });
-            }
-          });
+          })
+            .then((info) => {
+              if (!info) {
+                return UserCourse.create({
+                  course_code: course.courseCode,
+                  course_title: course.courseTitle,
+                  grade: course.grade,
+                  units: course.units,
+                  section: course.section,
+                  instructor: course.instructor,
+                  user_id: data.id,
+                  academic_year: academic_year,
+                });
+              }
+            })
+            .then(() => {
+              if (!data.name && name) {
+                data.name = name;
+                return data.save();
+              }
+            });
         });
         return res.status(200).json({
           success: true,
@@ -68,6 +75,7 @@ exports.createUser = (req, res, next) => {
       }
     })
     .catch((err) => {
+      console.error(err);
       next(err);
     });
 };
@@ -188,84 +196,175 @@ exports.findRequiredSubs = (req, res, next) => {
     });
 };
 
+// exports.findAllTakers = (req, res, next) => {
+//   User.findAll()
+//     .then((users) => {
+//       var allTakers = [];
+//       users.map((user) => {
+//         const taken = [];
+//         if (user) {
+//           return UserCourse.findAll({
+//             where: {
+//               user_id: user.id,
+//             },
+//           })
+//             .then((userCourses) => {
+//               userCourses.forEach((element) => {
+//                 taken.push(element.course_code);
+//               });
+//             })
+//             .then(() => {
+//               const required = [];
+//               // return res.status(200).json({success: true, taken});
+//               return Courses.findAll({
+//                 where: {
+//                   degree: user.degree,
+//                 },
+//               })
+//                 .then((allCourses) => {
+//                   allCourses.forEach((element) => {
+//                     if (!taken.includes(element.course_code)) {
+//                       required.push(element);
+//                     }
+//                   });
+//                 })
+//                 .then(() => {
+//                   const courseTypes = {};
+//                   function addItem(key, item) {
+//                     if (!courseTypes[key]) {
+//                       courseTypes[key] = []; // If the key doesn't exist, create an empty array
+//                     }
+//                     courseTypes[key].push(item); // Push the item into the array
+//                   }
+//                   required.forEach((el) => {
+//                     addItem(el.course_type, el);
+//                   });
+//                   return CourseElectives.findOne({
+//                     where: {
+//                       degree: user.degree,
+//                     },
+//                   }).then((el) => {
+//                     const courseKeys = Object.keys(courseTypes);
+//                     if (el.electives < courseTypes["elective"].length) {
+//                       delete courseTypes.electives;
+//                     }
+//                     // var no_thesis = false;
+//                     courseKeys.map((item) => {
+//                       if (
+//                         item.toString() !== "thesis" &&
+//                         item.toString() !== "dissertation" &&
+//                         item.toString() !== "capstone"
+//                       ) {
+//                         if (courseTypes[item].length > 0) {
+//                           // no_thesis = true;
+//                           delete courseTypes.thesis;
+//                           delete courseTypes.dissertation;
+//                           delete courseTypes.capstone;
+//                         }
+//                       }
+//                     });
+//                     Object.keys(courseTypes).map((item) => {
+//                       courseTypes[item].map((el) => {
+//                         allTakers.push(el);
+//                       });
+//                     });
+//                   });
+//                 });
+//             });
+//         }
+        
+//       });
+//     })
+//     .catch((err) => {
+//       next(err);
+//     });
+// };
 exports.findAllTakers = (req, res, next) => {
-  User.findAll().then(users => {
-    var allTakers = [];
-    users.map(user => {
-      const taken = [];
-      if (user) {
-        return UserCourse.findAll({
-          where: {
-            user_id: user.id,
-          },
-        })
-          .then((userCourses) => {
-            userCourses.forEach((element) => {
-              taken.push(element.course_code);
-            });
+  User.findAll()
+    .then((users) => {
+      const allTakers = [];
+      const promises = users.map((user) => {
+        const taken = [];
+        if (user) {
+          return UserCourse.findAll({
+            where: {
+              user_id: user.id,
+            },
           })
-          .then(() => {
-            const required = [];
-            // return res.status(200).json({success: true, taken});
-            return Courses.findAll({
-              where: {
-                degree: user.degree,
-              },
+            .then((userCourses) => {
+              userCourses.forEach((element) => {
+                taken.push(element.course_code);
+              });
             })
-              .then((allCourses) => {
-                allCourses.forEach((element) => {
-                  if (!taken.includes(element.course_code)) {
-                    required.push(element);
-                  }
-                });
+            .then(() => {
+              const required = [];
+              return Courses.findAll({
+                where: {
+                  degree: user.degree,
+                },
               })
-              .then(() => {
-                const courseTypes = {};
-                function addItem(key, item) {
-                  if (!courseTypes[key]) {
-                    courseTypes[key] = []; // If the key doesn't exist, create an empty array
-                  }
-                  courseTypes[key].push(item); // Push the item into the array
-                }
-                required.forEach((el) => {
-                  addItem(el.course_type, el);
-                });
-                return CourseElectives.findOne({
-                  where: {
-                    degree: user.degree,
-                  },
-                }).then((el) => {
-                  const courseKeys = Object.keys(courseTypes);
-                  if (el.electives < courseTypes["elective"].length) {
-                    delete courseTypes.electives;
-                  }
-                  // var no_thesis = false;
-                  courseKeys.map((item) => {
-                    if (
-                      item.toString() !== "thesis" &&
-                      item.toString() !== "dissertation" &&
-                      item.toString() !== "capstone"
-                    ) {
-                      if (courseTypes[item].length > 0) {
-                        // no_thesis = true;
-                        delete courseTypes.thesis;
-                        delete courseTypes.dissertation;
-                        delete courseTypes.capstone;
-                      }
+                .then((allCourses) => {
+                  allCourses.forEach((element) => {
+                    if (!taken.includes(element.course_code)) {
+                      required.push(element);
                     }
                   });
-                  Object.keys(courseTypes).map(item => {
-                    courseTypes[item].map(el => {
-                      allTakers.push(el);
-                    })
-                  })
-                  return res.status(200).json({success: true, courseTypes: allTakers});
+                })
+                .then(() => {
+                  const courseTypes = {};
+                  function addItem(key, item) {
+                    if (!courseTypes[key]) {
+                      courseTypes[key] = []; 
+                    }
+                    courseTypes[key].push(item); 
+                  }
+                  required.forEach((el) => {
+                    addItem(el.course_type, el);
+                  });
+                  return CourseElectives.findOne({
+                    where: {
+                      degree: user.degree,
+                    },
+                  }).then((el) => {
+                    const courseKeys = Object.keys(courseTypes);
+                    if (el.electives < courseTypes["elective"].length) {
+                      delete courseTypes.electives;
+                    }
+                    courseKeys.map((item) => {
+                      if (
+                        item.toString() !== "thesis" &&
+                        item.toString() !== "dissertation" &&
+                        item.toString() !== "capstone"
+                      ) {
+                        if (courseTypes[item].length > 0) {
+                          delete courseTypes.thesis;
+                          delete courseTypes.dissertation;
+                          delete courseTypes.capstone;
+                        }
+                      }
+                    });
+                    Object.keys(courseTypes).map((item) => {
+                      courseTypes[item].map((el) => {
+                        allTakers.push(el);
+                      });
+                    });
+                  });
                 });
-              });
-          });
-      }
+            });
+        }
+        
+      });
+      // Return a promise that resolves when all inner promises are resolved
+      return Promise.all(promises).then(() => {
+        return allTakers; // Resolve with the allTakers array
+      });
     })
-  }).catch(err=>{
-    next(err);
-  })
+    .then((allTakers) => {
+      // Now you can use the allTakers array
+      res.status(200).json({ success: true, courseTypes: allTakers });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
+

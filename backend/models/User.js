@@ -10,7 +10,7 @@ const User = sequelizeConnect.define("users", {
   },
   name: {
     type: Sequelize.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   srcode: {
     type: Sequelize.STRING,
