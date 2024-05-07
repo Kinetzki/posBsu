@@ -21,7 +21,7 @@ function Taken({ srcode }) {
   }, []);
 
   return (
-    <div className="w-full flex flex-col p-2 px-[50px]">
+    <div className="w-full flex flex-col p-2 px-[50px] min-h-[50vh]">
       <div>
         <h1 className="font-semibold text-[20px] leading-none">
           Courses Taken

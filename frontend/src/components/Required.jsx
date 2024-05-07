@@ -21,7 +21,15 @@ function Required({ srcode }) {
   }, []);
   
   return (
-    <div className="flex flex-col w-full p-5">
+    <div className="flex flex-col w-full p-5 min-h-[50vh]">
+      <div>
+        <h1 className="font-semibold text-[20px] leading-none">
+          Required Courses
+        </h1>
+        <p>
+          The listed courses below are the required courses to be taken by the student.
+        </p>
+      </div>
       {
         // requiredSubs.map((req,i) => {
         //     return (
