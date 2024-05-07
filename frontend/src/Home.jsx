@@ -11,11 +11,13 @@ import DragAndDrop from "./components/DragAndDrop";
 import Required from "./components/Required";
 import Taken from "./components/Taken";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import Footer from "./components/Footer";
 
-function Home({srcode, degree, isNewUser}) {
+function Home({ srcode, degree, isNewUser }) {
   const [data, setData] = useState(null);
   const [active, setActive] = useState("upload");
-
+  const navigate = useNavigate();
   const createUser = async (d) => {
     try {
       const response = await axios.post(
@@ -28,20 +30,28 @@ function Home({srcode, degree, isNewUser}) {
     }
   };
 
-  useEffect(()=>{
-    console.log(isNewUser)
-    console.log(degree)
+  useEffect(() => {
+    console.log(isNewUser);
+    console.log(degree);
+    if (!srcode) {
+      navigate("/");
+    }
     if (isNewUser) {
       const newUser = async () => {
-        const response = await createUser({degree:degree, srcode:srcode, courses: [], academic_year: "2023-2024"})
-      }
+        const response = await createUser({
+          degree: degree,
+          srcode: srcode,
+          courses: [],
+          academic_year: "2023-2024",
+        });
+      };
       newUser();
     }
-  }, [])
+  }, []);
 
   return (
     <div className="w-full min-h-screen flex flex-col">
-      <Header />
+      <Header srcode={srcode} />
       <div className="w-full p-3">
         <div className="bg-[#C21B1B] w-full h-[100px] flex items-center justify-center text-white font-semibold text-[18px]">
           <h1>POS GENERATION SYSTEM</h1>
@@ -74,18 +84,16 @@ function Home({srcode, degree, isNewUser}) {
       {active === "upload" && (
         <DragAndDrop
           setData={async (extract) => {
-            console.log(extract)
+            console.log(extract);
             setData(extract);
             await createUser(extract);
             setActive("required");
           }}
         />
       )}
-      {active === "required" && 
-      <Required 
-      srcode={srcode}
-      />}
-      {active === "taken" && <Taken srcode={srcode}/>}
+      {active === "required" && <Required srcode={srcode} />}
+      {active === "taken" && <Taken srcode={srcode} />}
+      <Footer/>
     </div>
   );
 }
