@@ -19,14 +19,16 @@ function Header({ srcode }) {
       </div>
 
       <div className="flex gap-10">
-        <h1
-          className="font-semibold text-[15px] cursor-pointer"
-          onClick={() => {
-            navigate("/dashboard");
-          }}
-        >
-          Home
-        </h1>
+        {!(srcode === "admin") && (
+          <h1
+            className="font-semibold text-[15px] cursor-pointer"
+            onClick={() => {
+              navigate("/dashboard");
+            }}
+          >
+            Home
+          </h1>
+        )}
         <h1
           className="font-semibold text-[15px] cursor-pointer"
           onClick={() => {
@@ -52,9 +54,14 @@ function Header({ srcode }) {
                 SR-CODE
               </span>
             </h1>
-            <img src={logout} alt="" className="w-[30px] cursor-pointer" onClick={()=>{
-              location.reload();
-            }}/>
+            <img
+              src={logout}
+              alt=""
+              className="w-[30px] cursor-pointer"
+              onClick={() => {
+                location.reload();
+              }}
+            />
           </div>
         )}
       </div>
