@@ -19,7 +19,7 @@ function Header({ srcode }) {
       </div>
 
       <div className="flex gap-10">
-        {!(srcode === "admin") && (
+        {srcode !== "admin" && (
           <h1
             className="font-semibold text-[15px] cursor-pointer"
             onClick={() => {

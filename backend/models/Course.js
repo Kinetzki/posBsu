@@ -25,7 +25,7 @@ const Course = sequelizeConnect.define("courses", {
     allowNull: false,
   },
   course_type: {
-    type: Sequelize.ENUM("specialization","major", "elective", "core", "thesis", "capstone", "dissertation")
+    type: Sequelize.ENUM("specialization","foundation","major", "elective", "core", "thesis", "capstone", "dissertation")
   }
 });
 

@@ -3,7 +3,7 @@ import Header from "./components/header";
 import axios from "axios";
 import Taker from "./components/Taker";
 
-function Admin() {
+function Admin({srcode}) {
   const [takers, setTakers] = useState([]);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ function Admin() {
 
   return (
     <div className="w-full min-h-screen flex flex-col items-center gap-4">
-      <Header />
+      <Header srcode={srcode}/>
       <div className="w-[95%] bg-[#C21B1B] h-[120px] font-semibold text-white flex items-center justify-center text-[20px]">
         <h1>POS GENERATION FOR ALANGILAN GRADUATE SCHOOL</h1>
       </div>

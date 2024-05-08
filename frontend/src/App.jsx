@@ -12,22 +12,38 @@ function App() {
   const [degree, setDegree] = useState("");
   const navigate = useNavigate();
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(degree);
-    if(degree) {
+    if (degree) {
       setIsNewUser(true);
       navigate("/dashboard");
     }
-  }, [degree])
+  }, [degree]);
 
   return (
     <>
       <Routes>
-        <Route exact path="/dashboard" element={<Home srcode={srCode} degree={degree} isNewUser={isNewUser}/>} />
-        <Route exact path="/admin" element={<Admin />} />
-        <Route exact path="/about" element={<About srcode={srCode}/>} />
-        <Route exact path="/programs" element={<Programs srcode={srCode}/>} />
-        <Route exact path="/" element={<Login setSr={setSrCode} setNew={setIsNewUser} setDegree={setDegree}/>} />
+        <Route
+          exact
+          path="/dashboard"
+          element={
+            <Home srcode={srCode} degree={degree} isNewUser={isNewUser} />
+          }
+        />
+        <Route exact path="/admin" element={<Admin srcode={srCode} />} />
+        <Route exact path="/about" element={<About srcode={srCode} />} />
+        <Route exact path="/programs" element={<Programs srcode={srCode} />} />
+        <Route
+          exact
+          path="/"
+          element={
+            <Login
+              setSr={setSrCode}
+              setNew={setIsNewUser}
+              setDegree={setDegree}
+            />
+          }
+        />
       </Routes>
     </>
   );
