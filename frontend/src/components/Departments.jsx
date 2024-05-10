@@ -111,7 +111,7 @@ function Departments({ setDeg }) {
           </h1>
         </div>
         <h1>{degree}</h1>
-        <button onClick={handleProceed}>Proceed</button>
+        <button onClick={handleProceed} className="px-[20px] py-[10px] bg-[#0E87C9] rounded-full text-white font-semibold hover:bg-slate-700">Proceed</button>
       </div>
     </div>
   );
