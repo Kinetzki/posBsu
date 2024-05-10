@@ -3,7 +3,7 @@ import Header from "./components/header";
 import axios from "axios";
 import Taker from "./components/Taker";
 
-function Admin({srcode}) {
+function Admin({ srcode }) {
   const [takers, setTakers] = useState([]);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ function Admin({srcode}) {
 
   return (
     <div className="w-full min-h-screen flex flex-col items-center gap-4">
-      <Header srcode={srcode}/>
+      <Header srcode={srcode} />
       <div className="w-[95%] bg-[#C21B1B] h-[120px] font-semibold text-white flex items-center justify-center text-[20px]">
         <h1>POS GENERATION FOR ALANGILAN GRADUATE SCHOOL</h1>
       </div>
@@ -54,7 +54,16 @@ function Admin({srcode}) {
           please contact registrar/admin.
         </p>
       </div>
-      <div className="mt-[30px] flex flex-col h-[400px] overflow-y-auto mb-[60px]">
+      <div className="mt-[30px] flex flex-col bg-slate-100 w-[900px]">
+        <div className="flex gap-10 p-5 border-b-[0px] border-[#0000002f] font-semibold font-Inter">
+          <h1 className="w-[105px]">Course Code</h1>
+          <h1 className="w-[440px]">Course Title</h1>
+          <h1 className="w-[125px]">No. of Students</h1>
+          <h1 className={"w-[10px]"}>Status</h1>
+        </div>
+      </div>
+
+      <div className="flex flex-col h-[400px] overflow-y-auto mb-[60px] w-[900px]">
         {Object.keys(takers).map((code) => {
           return (
             // <div className="flex gap-10">
@@ -63,7 +72,7 @@ function Admin({srcode}) {
             //   <h1 className="w-[100px]">{takers[code].count}</h1>
             //   <h1 className="w-[100px]">{takers[code].available ? "Green": "Red"}</h1>
             // </div>
-            <Taker takers={takers} code={code}/>
+            <Taker takers={takers} code={code} />
           );
         })}
       </div>
