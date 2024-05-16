@@ -1,22 +1,28 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import TakenCourse from "./takenCourse";
+import Loader from "./Loader";
 
 function Taken({ srcode }) {
   const [courses, setCourses] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchTaken = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        `http://localhost:3001/api/v1/user-course/${srcode}/all`
+      );
+      console.log(response.data.userCourses);
+      setCourses(response.data.userCourses);
+    } catch (err) {
+      console.error(err);
+    }
+    setIsLoading(false);
+
+  };
 
   useEffect(() => {
-    const fetchTaken = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3001/api/v1/user-course/${srcode}/all`
-        );
-        console.log(response.data.userCourses);
-        setCourses(response.data.userCourses);
-      } catch (err) {
-        console.error(err);
-      }
-    };
     fetchTaken();
   }, []);
 
@@ -39,10 +45,11 @@ function Taken({ srcode }) {
           <h1 className="text-black w-[200px] truncate">Instructor</h1>
           <h1 className="text-black w-[120px]">Academic Year</h1>
         </div>
-
-        {(courses.length > 0) && courses.map((course, i) => {
-          return <TakenCourse course={course} key={i} />;
-        })}
+        {isLoading && <Loader />}
+        {courses.length > 0 &&
+          courses.map((course, i) => {
+            return <TakenCourse course={course} key={i} />;
+          })}
       </div>
     </div>
   );

@@ -60,6 +60,7 @@ function Header({ srcode }) {
               className="w-[30px] cursor-pointer"
               onClick={() => {
                 location.reload();
+                navigate("/");
               }}
             />
           </div>

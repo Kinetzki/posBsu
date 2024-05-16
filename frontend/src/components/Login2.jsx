@@ -56,11 +56,12 @@ function Login2({ setSr, setDegree }) {
                 onClick={() => {
                     if (srcode === 'admin') {
                         navigate("/admin");
+                    } else {
+                      navigate("/dashboard");
                     }
                   // change this
                   setSr(srcode);
-                  // navigate("/dashboard");
-                  setIsShowUserStatus(true);
+                  // setIsShowUserStatus(true);
                 }}
               >
                 <button>Log in</button>

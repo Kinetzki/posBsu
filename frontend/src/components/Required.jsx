@@ -1,22 +1,27 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import RequiredSub from "./RequiredSub";
+import Loader from "./Loader";
 
 function Required({ srcode }) {
   const [requiredSubs, setRequiredSubs] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchRequired = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        `http://localhost:3001/api/v1/user/${srcode}/required`
+      );
+      setRequiredSubs(response.data.courseTypes);
+      console.log(response.data.courseTypes);
+    } catch (err) {
+      console.error(err);
+    }
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    const fetchRequired = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3001/api/v1/user/${srcode}/required`
-        );
-        setRequiredSubs(response.data.courseTypes);
-        console.log(response.data.courseTypes);
-      } catch (err) {
-        console.error(err);
-      }
-    };
     fetchRequired();
   }, []);
   
@@ -30,6 +35,7 @@ function Required({ srcode }) {
           The listed courses below are the required courses to be taken by the student.
         </p>
       </div>
+      {isLoading && <Loader/>}
       {
         // requiredSubs.map((req,i) => {
         //     return (
