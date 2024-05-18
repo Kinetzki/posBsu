@@ -6,6 +6,7 @@ exports.createCourse = (req, res, next) => {
     where: {
       course_code: course_code,
       course_type: course_type,
+      degree: degree
     },
   })
     .then((data) => {

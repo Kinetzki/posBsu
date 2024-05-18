@@ -34,6 +34,7 @@ function Admin({ srcode }) {
         const takers = response.data.courseTypes;
         const allDegrees = [];
         const counts = {};
+        console.log(takers);
         takers.forEach((course) => {
           const count = { available: false };
           if (!allDegrees.includes(course.degree)) {
@@ -51,7 +52,6 @@ function Admin({ srcode }) {
             counts[course.course_code] = count;
           }
         });
-        console.log(counts);
         setPrograms(allDegrees);
         setTakers(counts);
       }

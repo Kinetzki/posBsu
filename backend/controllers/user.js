@@ -197,11 +197,20 @@ exports.findAllTakers = (req, res, next) => {
                 },
               })
                 .then((allCourses) => {
+                  console.log(user.degree);
                   allCourses.forEach((element) => {
+                    console.log(element.course_code);
+
                     if (!taken.includes(element.course_code)) {
                       required.push(element);
                     }
                   });
+                  console.log("------------------------------------------");
+                  // console.log(user.degree)
+                  // required.forEach(re => {
+                  //   console.log(re.course_title);
+                  // })
+                  // console.log("----------------------------------------")
                 })
                 .then(() => {
                   const courseTypes = {};

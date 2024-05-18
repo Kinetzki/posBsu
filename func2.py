@@ -104,7 +104,7 @@ arr4=[
 ["Course Code 2", "Course Title 2", "elective", "Master of Science in Transportation Engineering", 3],
 ["Compre", "Comprehensive Examination", "major", "Master of Science in Transportation Engineering", 3],
 ["MSTE 522", "Thesis 1", "thesis", "Master of Science in Transportation Engineering", 3],
-["MSTE 522", "Thesis 2", "thesis", "Master of Science in Transportation Engineering", 3],
+["MSTE 523", "Thesis 2", "thesis", "Master of Science in Transportation Engineering", 3],
 ]
 
 arr5=[
@@ -174,7 +174,7 @@ arr9=[
 ["MSEM 507","Quality Engineering and Management", "specialization", "Master of Science in Engineering Management", 3],
 ["Course Code 1", "Course Title 1", "elective", "Master of Science in Engineering Management", 3],
 ["Course Code 2", "Course Title 2", "elective", "Master of Science in Engineering Management", 3],
-["Course Code 2", "Course Title 2", "elective", "Master of Science in Engineering Management", 3],
+["Course Code 3", "Course Title 3", "elective", "Master of Science in Engineering Management", 3],
 ["MSEM 517","Thesis Writing 1", "thesis", "Master of Science in Engineering Management", 3],
 ["MSEM 518","Thesis Writing 2", "thesis", "Master of Science in Engineering Management", 3],
 ]
@@ -207,9 +207,9 @@ arr10=[
 ["GECE 524","Flat Antenna Design", "elective", "Doctor of Philosophy in Electronics Engineering", 3],
 ["GECE 525","Numerical Electromagnetics", "elective", "Doctor of Philosophy in Electronics Engineering", 3],
 ["GECE 526","Hilbert Space Method and Applications", "elective", "Doctor of Philosophy in Electronics Engineering", 3],
-["GECE 526","Robotics and Automation", "elective", "Doctor of Philosophy in Electronics Engineering", 3],
-["GECE 526","High Performance & Parallel Computer Architectures", "elective", "Doctor of Philosophy in Electronics Engineering", 3],
-["GECE 526","Hyperspectral Data Processing", "elective", "Doctor of Philosophy in Electronics Engineering", 3],
+["GECE 527","Robotics and Automation", "elective", "Doctor of Philosophy in Electronics Engineering", 3],
+["GECE 528","High Performance & Parallel Computer Architectures", "elective", "Doctor of Philosophy in Electronics Engineering", 3],
+["GECE 529","Hyperspectral Data Processing", "elective", "Doctor of Philosophy in Electronics Engineering", 3],
 ["GECE 530","Low Power System Design", "elective", "Doctor of Philosophy in Electronics Engineering", 3],
 ["GECE 531","System-On-Chip Design", "elective", "Doctor of Philosophy in Electronics Engineering", 3],
 ["GECE 603","Dissertation 1", "dissertation", "Doctor of Philosophy in Electronics Engineering", 3],
@@ -287,7 +287,6 @@ arr13=[
 ["MIE 505","Logistics Management and Services", "elective", "Master of Engineering major in Industrial Engineering", 3],
 ["MIE 506","Special Problems Related to Supply Chain Management", "elective", "Master of Engineering major in Industrial Engineering", 3],
 ["MIE 507","Strategic Planning and Management", "elective", "Master of Engineering major in Industrial Engineering", 3],
-["MIE 504","Management Information System", "elective", "Master of Engineering major in Industrial Engineering", 3],
 ["MIE 508","Six Sigma", "elective", "Master of Engineering major in Industrial Engineering", 3],
 ["MIE 509","Special Problems Related to Quality Management System", "elective", "Master of Engineering major in Industrial Engineering", 3],
 ["Course Code 1", "Course Title 1", "elective", "Master of Engineering major in Industrial Engineering", 3],
@@ -454,8 +453,8 @@ arr20=[
 ["MSDS 515","Cross-Platform Applications Design and Development", "elective", "Master of Science in Data Science", 3],
 ["Course Code 1", "Special Topics in Data Science 1", "elective", "Master of Science in Data Science", 3],
 ["Course Code 2", "Special Topics in Data Science 2", "elective", "Master of Science in Data Science", 3],
-["Course Code 1", "Course Title 1", "elective", "Master of Science in Data Science", 3],
-["Course Code 2", "Courese Title 2", "elective", "Master of Science in Data Science", 3],
+["Course Code 3", "Course Title 1", "elective", "Master of Science in Data Science", 3],
+["Course Code 4", "Courese Title 2", "elective", "Master of Science in Data Science", 3],
 ["MSDS 520","Thesis 1", "thesis", "Master of Science in Data Science", 3],
 ["MSDS 521","Thesis 2", "thesis", "Master of Science in Data Science", 3],
 ]
@@ -525,7 +524,6 @@ arrays = [ arr0, arr1, arr2, arr3, arr4, arr5, arr6, arr7, arr8, arr9, arr10, ar
 
 for i in arrays:
     for y in i:
-        print (i, y)
         data = {"course_code": y[0], "course_title": y[1],
                 "degree": y[3], "units": y[4], "course_type": y[2]}
         response = requests.post("http://localhost:3001/api/v1/course/create", json=data)
