@@ -36,7 +36,7 @@ function Login2({ setSr, setDegree }) {
             <input
               type="text"
               className="bg-slate-200 h-[50px] rounded-lg px-5 w-full"
-              placeholder="SR-Code"
+              placeholder="Username"
               onChange={(e) => {
                 setSrCode(e.target.value);
               }}
