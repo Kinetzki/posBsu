@@ -34,7 +34,6 @@ function Admin({ srcode }) {
         const takers = response.data.courseTypes;
         const allDegrees = [];
         const counts = {};
-        console.log(takers);
         takers.forEach((course) => {
           const count = { available: false };
           if (!allDegrees.includes(course.degree)) {
@@ -56,12 +55,13 @@ function Admin({ srcode }) {
         setTakers(counts);
       }
     } catch (err) {
-      console.error(err);
+      console.log(err);
     }
   };
 
   useEffect(() => {
     setRendered(takers);
+    console.log("Setted");
   }, [takers]);
 
   useEffect(() => {
@@ -75,16 +75,15 @@ function Admin({ srcode }) {
           last[el] = takers[el];
         }
       });
-      console.log(last);
       setRendered(last);
     }
   }, [sortKey]);
 
   useEffect(() => {
+    fetchTakers();
     if (!srcode) {
       navigate("/");
     }
-    fetchTakers();
   }, []);
 
   const handleCreateUser = async () => {
@@ -115,9 +114,12 @@ function Admin({ srcode }) {
             setIsShowAdd(!isShowAdd);
           }}
         />
-        <Button1 text="Edit Students" handleClick={() => {
-          setIsShowEdit(!isShowEdit)
-        }} />
+        <Button1
+          text="Edit Students"
+          handleClick={() => {
+            setIsShowEdit(!isShowEdit);
+          }}
+        />
       </div>
 
       {isShowAdd && (
@@ -129,9 +131,17 @@ function Admin({ srcode }) {
       )}
 
       {isShowEdit && (
-        <EditStudent show={setIsShowEdit} refresh={async ()=>{
-          await fetchTakers();
-        }}/>
+        <EditStudent
+          show={setIsShowEdit}
+          refresh={async () => {
+            try {
+              await fetchTakers();
+              setIsShowEdit(false);
+            } catch (err) {
+              console.log(err);
+            }
+          }}
+        />
       )}
 
       {isSuccess && (
@@ -152,7 +162,7 @@ function Admin({ srcode }) {
             </p>
           </div>
           <div className="flex gap-2 items-center w-full px-10">
-            <Dropdown setKey={setSortKey} items={["all",...programs]} />
+            <Dropdown setKey={setSortKey} items={["all", ...programs]} />
           </div>
           <div className="mt-[30px] flex flex-col bg-slate-100 w-[900px]">
             <div className="flex gap-10 p-5 border-b-[0px] border-[#0000002f] font-semibold font-Inter">
@@ -164,17 +174,20 @@ function Admin({ srcode }) {
           </div>
 
           <div className="flex flex-col h-[400px] overflow-y-auto mb-[60px] w-[900px]">
-            {Object.keys(rendered).map((code) => {
-              return (
-                // <div className="flex gap-10">
-                //   <h1 className="w-[100px]">{code}</h1>
-                //   <h1 className="w-[500px]">{takers[code].course_title}</h1>
-                //   <h1 className="w-[100px]">{takers[code].count}</h1>
-                //   <h1 className="w-[100px]">{takers[code].available ? "Green": "Red"}</h1>
-                // </div>
-                <Taker takers={takers} code={code} />
-              );
-            })}
+            {console.log(takers)}
+            {rendered &&
+              Object.keys(rendered).map((code, i) => {
+                console.log(rendered[code]);
+                return (
+                  // <div className="flex gap-10">
+                  //   <h1 className="w-[100px]">{code}</h1>
+                  //   <h1 className="w-[500px]">{takers[code].course_title}</h1>
+                  //   <h1 className="w-[100px]">{takers[code].count}</h1>
+                  //   <h1 className="w-[100px]">{takers[code].available ? "Green": "Red"}</h1>
+                  // </div>
+                  <Taker takers={takers} code={code} key={i} />
+                );
+              })}
           </div>
         </>
       )}

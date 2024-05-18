@@ -15,7 +15,7 @@ function Dropdown({ items, setKey }) {
       <h1 className="font-semibold truncate w-[180px]">{active}</h1>
       <img src={sort} alt="" className="w-[10px]" />
       {isClicked && (
-        <div className="absolute top-[50px] left-0 flex flex-col gap-1 min-w-[400px] border-[1px] border-slate-400 p-2 bg-white rounded-lg">
+        <div className="absolute top-[50px] left-0 flex flex-col gap-1 min-w-[500px] border-[1px] border-slate-400 p-2 bg-white rounded-lg">
           {items.map((item) => {
             return (
               <h1

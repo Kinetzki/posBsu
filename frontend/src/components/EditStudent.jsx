@@ -192,10 +192,7 @@ function EditStudent({ show, refresh }) {
         </button> */}
         <Button1
           text="Ok"
-          handleClick={async () => {
-            await refresh();
-            show(false);
-          }}
+          handleClick={refresh}
         />
       </div>
     </div>
