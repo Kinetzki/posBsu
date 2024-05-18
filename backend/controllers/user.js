@@ -219,9 +219,11 @@ exports.findAllTakers = (req, res, next) => {
                       degree: user.degree,
                     },
                   }).then((el) => {
+                    var elecFull = false;
                     const courseKeys = Object.keys(courseTypes);
-                    if (el.electives < courseTypes["elective"].length) {
-                      delete courseTypes.electives;
+                    if (el.electives <= taken.length) {
+                      delete courseTypes.elective;
+                      elecFull = true;
                     }
                     courseKeys.map((item) => {
                       if (
@@ -229,10 +231,13 @@ exports.findAllTakers = (req, res, next) => {
                         item.toString() !== "dissertation" &&
                         item.toString() !== "capstone"
                       ) {
-                        if (courseTypes[item].length > 0) {
-                          delete courseTypes.thesis;
-                          delete courseTypes.dissertation;
-                          delete courseTypes.capstone;
+                        if (!(elecFull && item === "elective")) {
+                          if (courseTypes[item].length > 0) {
+                            // no_thesis = true;
+                            delete courseTypes.thesis;
+                            delete courseTypes.dissertation;
+                            delete courseTypes.capstone;
+                          }
                         }
                       }
                     });
