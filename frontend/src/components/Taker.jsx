@@ -24,9 +24,6 @@
 import React, { useEffect } from "react";
 
 function Taker({ takers, code }) {
-  useEffect(() => {
-    console.log(takers);
-  }, [takers]); // Added `takers` as a dependency to re-run the effect if `takers` changes
 
   // Check if takers and takers[code] are defined
   const taker = takers && takers[code];
