@@ -132,23 +132,28 @@ exports.findRequiredSubs = (req, res, next) => {
                     degree: user.degree,
                   },
                 }).then((el) => {
-                  console.log(el)
+                  var elecFull = false;
+                  console.log(el.electives);
                   const courseKeys = Object.keys(courseTypes);
-                  if (el.electives < courseTypes["elective"].length) {
-                    delete courseTypes.electives;
+                  console.log(taken);
+                  if (el.electives <= taken.length) {
+                    console.log("Removed");
+                    delete courseTypes.elective;
+                    elecFull = true;
                   }
-                  // var no_thesis = false;
                   courseKeys.map((item) => {
                     if (
                       item.toString() !== "thesis" &&
                       item.toString() !== "dissertation" &&
                       item.toString() !== "capstone"
                     ) {
-                      if (courseTypes[item].length > 0) {
-                        // no_thesis = true;
-                        delete courseTypes.thesis;
-                        delete courseTypes.dissertation;
-                        delete courseTypes.capstone;
+                      if (!(elecFull && item === "elective")) {
+                        if (courseTypes[item].length > 0) {
+                          // no_thesis = true;
+                          delete courseTypes.thesis;
+                          delete courseTypes.dissertation;
+                          delete courseTypes.capstone;
+                        }
                       }
                     }
                   });
@@ -202,9 +207,9 @@ exports.findAllTakers = (req, res, next) => {
                   const courseTypes = {};
                   function addItem(key, item) {
                     if (!courseTypes[key]) {
-                      courseTypes[key] = []; 
+                      courseTypes[key] = [];
                     }
-                    courseTypes[key].push(item); 
+                    courseTypes[key].push(item);
                   }
                   required.forEach((el) => {
                     addItem(el.course_type, el);
@@ -256,37 +261,47 @@ exports.findAllTakers = (req, res, next) => {
 };
 
 exports.deleteUser = (req, res, next) => {
-  const {srcode} = req.params;
+  const { srcode } = req.params;
   User.findOne({
     where: {
-      srcode: srcode
-    }
-  }).then(user => {
-    if(user) {
-      user.destroy().then(()=>{
-        return res.status(200).json({success: true, message: "User removed"});
-      })
-    } else {
-      return res.status(400).json({success: false, message: "User does not exist"});
-    }
-  }).catch(err=>{
-    next(err);
+      srcode: srcode,
+    },
   })
-}
+    .then((user) => {
+      if (user) {
+        user.destroy().then(() => {
+          return res
+            .status(200)
+            .json({ success: true, message: "User removed" });
+        });
+      } else {
+        return res
+          .status(400)
+          .json({ success: false, message: "User does not exist" });
+      }
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
 
 exports.findUserById = (req, res, next) => {
-  const {srcode} = req.params;
+  const { srcode } = req.params;
   User.findOne({
     where: {
-      srcode: srcode
-    }
-  }).then(user => {
-    if(user) {
-      return res.status(200).json({success: true, user});
-    } else {
-      return res.status(400).json({success: false, message: "User does not exist"});
-    }
-  }).catch(err=>{
-    next(err);
+      srcode: srcode,
+    },
   })
-}
+    .then((user) => {
+      if (user) {
+        return res.status(200).json({ success: true, user });
+      } else {
+        return res
+          .status(400)
+          .json({ success: false, message: "User does not exist" });
+      }
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
