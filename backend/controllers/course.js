@@ -5,7 +5,7 @@ exports.createCourse = (req, res, next) => {
   Course.findOne({
     where: {
       course_code: course_code,
-      course_title: course_title
+      course_type: course_type,
     },
   })
     .then((data) => {
