@@ -37,8 +37,11 @@ function Login2({ setSr, setDegree }) {
               type="text"
               className="bg-slate-200 h-[50px] rounded-lg px-5 w-full"
               placeholder="Username"
+              value={srcode}
               onChange={(e) => {
-                setSrCode(e.target.value);
+                if ((e.target.value.length <= 11) && (/^[-\dA-Za-z]*$/.test(e.target.value))) {
+                  setSrCode(e.target.value);
+                }
               }}
             />
             <input
